@@ -1,0 +1,1 @@
+when assigning sales managers, numpy would have been more efficient for a large data set, however, pandas would be better for more complex logic. In this instance, I chose to use Pandas because it would give flexibility to more complex logic in the future, and also because the data was (at this time) not very large. 
