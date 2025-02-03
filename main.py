@@ -5,6 +5,6 @@
 # ####
 # import matplotlib.pyplot as plt
 # import seaborn as sns
-from DataVisuals_CaseStudy.scripts.data_preprocessing import save_clean_data, preprocessing
+from DataVisuals_CaseStudy.scripts.data_preprocessing import save_clean_data
 
-customer_df, sales_df, quarterly_sales, monthly_sales, manager_sales, merged_df = preprocessing()
+save_clean_data()
