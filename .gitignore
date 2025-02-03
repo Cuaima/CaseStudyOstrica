@@ -13,6 +13,8 @@ venv/
 
 # Ignore data files (optional, if data shouldn't be pushed)
 data/*.csv
+*.xlsx
+*.csv
 
 # Ignore results and generated visualizations
 results/

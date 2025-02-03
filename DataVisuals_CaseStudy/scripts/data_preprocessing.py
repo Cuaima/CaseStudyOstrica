@@ -2,7 +2,8 @@ import os, sys, glob
 import pandas as pd
 import os
 import hashlib
-
+from openpyxl import load_workbook
+import csv
 
 # Load Data
 def load_data(file_name: str) -> str:
@@ -16,7 +17,7 @@ def load_data(file_name: str) -> str:
         name (str): the name of the file.
 
     Returns: 
-        File: The file to be used for the dataframe.
+        File: The file to be used for the DataFrame.
     """
     # Import Relative Paths
     data_path = os.path.abspath('../CaseStudyOstrica/DataVisuals_CaseStudy/data')
@@ -38,6 +39,15 @@ def load_data(file_name: str) -> str:
     except Exception as e:
         print(f"Error during data processing: {e}")
 
+    # Create .csv files
+    wb = load_workbook(data_path + "/" + str(file_name) + "data_case.xlsx")
+    sheet = wb.active
+
+    with open(data_path + "/" + str(file_name) + ".csv", "w", newline="") as f:
+        writer = csv.writer(f)
+        for row in sheet.iter_rows(values_only=True):
+            writer.writerow(row)
+
     return raw_df
 
 def handle_missing_values(raw_df : str)->str:
@@ -45,7 +55,7 @@ def handle_missing_values(raw_df : str)->str:
     Removes missing values.
 
     Args:
-        raw_df(str): the name of the raw dataframe to be cleaned.
+        raw_df(str): the name of the raw DataFrame to be cleaned.
     """
     dataframe = load_data(raw_df) # Import Data Frame
     dataframe.dropna(inplace=True)  # Handle Missing Values  
@@ -62,7 +72,7 @@ def convert_date():
 
 def extract_month_quarter():
     """
-    Extracts month and quarter information.
+    Extracts month and quarter information and appends it to the sales DataFrame.
     """
     sales_df = convert_date()
     sales_df["year_month"] = sales_df["date"].dt.to_period("M") # Extract Month information
@@ -70,11 +80,17 @@ def extract_month_quarter():
     return sales_df
 
 def aggregate_month():
+    """
+    Creates a monthly sales DataFrame.
+    """
     sales_df = extract_month_quarter()
     monthly_sales = sales_df.groupby("year_month")["total_price"].sum().reset_index()
     return monthly_sales
 
 def aggregate_quarter():
+    """
+    Creates a quarterly sales DataFrame.
+    """
     sales_df = extract_month_quarter()
     quarterly_sales = sales_df.groupby("year_quarter")["total_price"].sum().reset_index()
     return quarterly_sales
@@ -88,9 +104,15 @@ def handle_missing_months():
     return monthly_sales
 
 def hash_value(val):
+    """
+    Hashes a value.
+    """
     return hashlib.sha256(val.encode()).hexdigest()
 
 def anonymize_data():
+    """
+    Anonymizes customer name and postal code.
+    """
     custumers_df = handle_missing_values("Customer")
     custumers_df["name"] = custumers_df["name"].apply(hash_value)
     custumers_df["postalcode"] = custumers_df["postalcode"].apply(hash_value)
@@ -98,7 +120,7 @@ def anonymize_data():
 
 def merge_dataframes():
     """
-    Merges both dataframes.
+    Merges sales and customer DataFrames.
     """
     sales_df = extract_month_quarter()
     customers_df = anonymize_data()
@@ -115,6 +137,9 @@ def decide_sales_manager(city : str)->str:
     return "Max"
 
 def assign_sales_manager():
+    """
+    Appends a table to the merged DataFrame where sales manager is assigned.
+    """
     merged_df = merge_dataframes()
     merged_df["sales_manager"] = merged_df["city"].apply(decide_sales_manager)
     return merged_df
@@ -132,10 +157,14 @@ def period_to_string():
     return monthly_sales, quarterly_sales
 
 def save_clean_data():
+    """
+    Saves the cleaned data.
+    """
     data_path = os.path.abspath('../CaseStudyOstrica/DataVisuals_CaseStudy/data')
     merged_df = assign_sales_manager()
     try:
         merged_df.to_excel(data_path + "/cleaned_data.xlsx", index=False, engine="openpyxl")
+        merged_df.to_csv(data_path + "/cleaned_data.csv", index=False)
 
     except Exception as e:
         print(f"Error during data processing: {e}")
@@ -143,6 +172,12 @@ def save_clean_data():
     return "Clean data saved!"
 
 def preprocessing():
+    """
+    Export pre-processed data to be used in other files.
+
+    Returns: 
+        DataFrames: customer, sales, manager sales, merged file, monthly sales, quarterly sales.
+    """
     customer_df = anonymize_data()
     sales_df = extract_month_quarter()
     manager_sales = aggregate_sales_manager()
