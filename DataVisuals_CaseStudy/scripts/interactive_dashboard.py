@@ -54,7 +54,7 @@ st.subheader("Monthly Sales Trend")
 
 filtered_sales["year_month"] = filtered_sales["year_month"].dt.to_timestamp()
 filtered_sales = filtered_sales.set_index("year_month")
-monthly_sales = filtered_sales.resample("M")["total_price"].sum().reset_index()
+monthly_sales = filtered_sales.resample("ME")["total_price"].sum().reset_index()
 
 fig_monthly_trend = px.line(monthly_sales, 
                x="year_month", 
