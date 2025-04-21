@@ -99,7 +99,7 @@ The dashboard includes:
 
 ---
 
-## ⚠️ **4. Assumptions & Challenges**
+## **4. Assumptions & Challenges**
 
 ### **4.1 Assumptions**
 
@@ -110,22 +110,23 @@ The dashboard includes:
 ### **4.2 Challenges Faced**
 
 - **Merging Data:** Sales & Customers had different column names for Customer IDs. **Solution:** Renamed columns before merging.
-- **Limited Knowledge of the Libraries:** As a first year student, on my first trimester of my career, this was my first time using most of the libraries used in this project.
+- **Limited Knowledge of the Libraries:** As a first-year student, in my first trimester of my career, this was my first time using most of the libraries used in this project.
 - **Organization:** It was difficult to keep the code modular and DRY.
-- **Choosing technologies:** When assigning sales managers, numpy would have been more efficient for a large data set, however, pandas would be better for more complex logic. In this instance, I chose to use Pandas because it would give flexibility to more complex logic in the future, and also because the data was (at this time) not very large. However, should the dataset be updated and grow, this design feature should be reconsidered.
+- **Choosing technologies:** When assigning sales managers, numpy would have been more efficient for a large data set; however, pandas would be better for more complex logic. In this instance, I chose to use Pandas because it would give flexibility to more complex logic in the future, and also because the data was (at this time) not very large. However, should the dataset be updated and grow, this design feature should be reconsidered.
 
 ---
 
 ## **5. Future Improvements**
 
-- Improve the **design** of the graphs to look better and be better at explaining the data. For the data created with Matplot:
-    - the revenue per manager sales, there are euros combined with percentages on the label of the graph, which is confusing, and the Y axis says euros but it only goes up to 1.2 and it's not clear if that is in millions or thousands.
+- The missing data is deleted in this implementation, which is not the best solution when dealing with missing data in general. I did not spend enough time with the data to know what (or if) there was a pattern to missing data. A possible solution would have been data imputation (ideally using neural networks). 
+- Improve the **design** of the graphs to look better and be better at explaining the data. For the data created with Matplotlib:
+    - The revenue per manager sales there are euros combined with percentages on the label of the graph, which is confusing, and the Y axis says euros, but it only goes up to 1.2, and it's not clear if that is in millions or thousands.
     - The target Opt-in graph could be shown better using a dotted line on the Y axis at the 65% mark.
     - The charts and plots are not visually appealing.
-- Write more pythonic code and follow the pep guidelines.
-- Regarding **missing values** and **anonymization**: I was not sure if removing the missing value rows was the best practice I could have used. Same with the customer personal data anonymization. I considered using Faker to simulate names and postal codes, but I was not sure if this is the industry standard. 
-- Make the files more modular, and making more functions out of the interactive dashboard. Perhaps making a class for some of the data objects (sales, customer, merged data), in order to make the code more comprehensive.
-- Add **tests** for both the code and the pipeline. And refactor the `try` and `except` code into something more pythonic.
+- Write more Pythonic code and follow the PEP guidelines.
+- Regarding **missing values** and **anonymization**: I was not sure if removing the missing value rows was the best practice I could have used. Same with the customer's personal data anonymization. I considered using Faker to simulate names and postal codes, but I was not sure if this is the industry standard. 
+- Make the files more modular, and make more functions out of the interactive dashboard. Perhaps making a class for some of the data objects (sales, customer, merged data), to make the code more comprehensive.
+- Add **tests** for both the code and the pipeline. And refactor the `try` and `except` code into something more Pythonic.
 - Add **geographic heatmap** for revenue distribution.
 - Improve **date filtering** for better performance.
 - Enable **user-uploaded datasets** for real-time analysis. This means that the files to be loaded would need to be curated, but it would enhance the flexibility of the application.
